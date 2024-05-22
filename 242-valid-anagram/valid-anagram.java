@@ -4,6 +4,7 @@ class Solution {
         else if((s == null || t == null) || (s.length() != t.length())) return false;
         int[] charCount = new int[26];
         for(int i = 0; i < s.length();i++){
+            if(s.charAt(i) == t.charAt(i)) continue;
             charCount[s.charAt(i) - 'a']++;
             charCount[t.charAt(i) - 'a']--;
         }
