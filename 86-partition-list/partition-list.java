@@ -22,11 +22,8 @@ class Solution {
             }
             head = head.next;
         }
-        if(dummy1 == current1) return dummy2.next;
-        else if(dummy2 == current2) return dummy1.next;
-        else{
-            current1.next = dummy2.next;
-            return dummy1.next;
-        }
+        current1.next = dummy2.next;
+        return dummy1.next;
+        
     }
 }
