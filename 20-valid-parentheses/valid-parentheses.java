@@ -15,7 +15,6 @@ class Solution {
                 else return false;
             }
         }
-        if(!stack.isEmpty()) return false;
-        return true;
+        return stack.isEmpty();
     }
 }
