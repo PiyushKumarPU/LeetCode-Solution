@@ -11,7 +11,7 @@ class Solution {
                 sum -= nums[left++];
             }
         }
-        //System.gc();
+        System.gc();
         return minLength == Integer.MAX_VALUE ? 0 : minLength;
     }
 }
