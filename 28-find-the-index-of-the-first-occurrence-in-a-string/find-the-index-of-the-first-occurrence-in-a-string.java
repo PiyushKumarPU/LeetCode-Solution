@@ -1,21 +1,12 @@
 class Solution {
     public int strStr(String haystack, String needle) {
-        if (needle.length() > haystack.length()) return -1;
-        int wordLength = haystack.length(), checkLength = needle.length();
-        // check for each window
-        for (int i = 0; i <= (wordLength - checkLength); i++) {
-            if (isValidRange(haystack, needle, i, i + checkLength - 1)) {
-                return i;
-            }
+        if(haystack == null || haystack.isEmpty()) return -1;
+        //if(haystack.length() == needle.length() && haystack.equals(needle) ) return 0;
+        int start = 0, nLen = needle.length();
+        while (start <= haystack.length() - nLen) {
+            if (haystack.substring(start, start + needle.length()).equals(needle)) return start;
+            start++;
         }
         return -1;
-    }
-
-    private boolean isValidRange(String main, String check, int start, int end) {
-        int checkIndex = 0;
-        for (int i = start; i <= end; i++) {
-            if (main.charAt(i) != check.charAt(checkIndex++)) return false;
-        }
-        return true;
-    }
+    }    
 }
