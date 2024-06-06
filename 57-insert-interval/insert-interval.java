@@ -1,32 +1,21 @@
 class Solution {
     public int[][] insert(int[][] intervals, int[] newInterval) {
-       List<Interval> result = new ArrayList<>();
-        List<Interval> intervalList = new ArrayList<>();
-        for (int[] arr : intervals) intervalList.add(new Interval(arr[0], arr[1]));
-        int index = 0;
-        while (index < intervalList.size() && intervalList.get(index).end < newInterval[0]) {
-            result.add(intervalList.get(index));
-            index++;
-        }
-        if (index == intervalList.size()) result.add(new Interval(newInterval[0], newInterval[1]));
-        else {
-            Interval current = new Interval(newInterval[0], newInterval[1]);
-            for (int i = index; i < intervalList.size(); i++) {
-                Interval next = intervalList.get(i);
-                if (current.start <= next.end && current.end >= next.start) {
-                    current.end = Math.max(current.end, next.end);
-                    current.start = Math.min(current.start, next.start);
-                } else {
-                    result.add(current);
-                    current = next;
-                }
+        ArrayList<Interval> result = new ArrayList<>();
+        for (int[] interval : intervals) {
+            if (interval[1] < newInterval[0]) {
+                result.add(new Interval(interval[0], interval[1]));
+            } else if (newInterval[1] < interval[0]) {
+                result.add(new Interval(newInterval[0], newInterval[1]));
+                newInterval = interval;
+            } else {
+                newInterval[0] = Math.min(newInterval[0], interval[0]);
+                newInterval[1] = Math.max(newInterval[1], interval[1]);
             }
-            result.add(current);
-
         }
+        result.add(new Interval(newInterval[0], newInterval[1]));
         return result.stream()
                 .map(interval -> new int[]{interval.start, interval.end})
-                .toArray(int[][]::new); 
+                .toArray(int[][]::new);
     }
 }
 
