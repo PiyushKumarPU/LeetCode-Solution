@@ -14,39 +14,29 @@
  * }
  */
 class Solution {
-    public List<List<Integer>> zigzagLevelOrder(TreeNode A) {
-        List<List<Integer>> zigzag = new ArrayList<>();
-        if(A == null) return zigzag;
-        Stack<TreeNode> stack1 = new Stack<>(), stack2 = new Stack<>();
-        if (A == null)
-            return null;
-
-        stack1.push(A);
-        while (!stack1.isEmpty() || !stack2.isEmpty()) {
-            ArrayList<Integer> level = new ArrayList<>();
-            while (!stack1.isEmpty()) {
-                TreeNode node = stack1.pop();
-                level.add(node.val);
-                if (node.left != null)
-                    stack2.push(node.left);
-                if (node.right != null)
-                    stack2.push(node.right);
+    public List<List<Integer>> zigzagLevelOrder(TreeNode root) {
+        List<List<Integer>> result = new ArrayList<>();
+        if (root == null) return result;
+        // perform normal inorder traversal and for all odd level add element from last
+        Queue<TreeNode> nodeQueue = new LinkedList<>();
+        nodeQueue.offer(root);
+        int level = 0;
+        while (!nodeQueue.isEmpty()) {
+            int queueSize = nodeQueue.size();
+            ArrayList<Integer> row = new ArrayList<>();
+            for (int i = 0; i < queueSize; i++) {
+                TreeNode current = nodeQueue.poll();
+                row.add(current.val);
+                if (current.left != null) nodeQueue.add(current.left);
+                if (current.right != null) nodeQueue.add(current.right);
             }
-            if (!level.isEmpty())
-                zigzag.add(level);
-            level = new ArrayList<>();
-
-            while (!stack2.isEmpty()) {
-                TreeNode node = stack2.pop();
-                level.add(node.val);
-                if (node.right != null)
-                    stack1.push(node.right);
-                if (node.left != null)
-                    stack1.push(node.left);
+            if (level % 2 == 0) result.add(row);
+            else {
+                Collections.reverse(row);
+                result.add(row);
             }
-            if (level.size() != 0)
-                zigzag.add(level);
+            level++;
         }
-        return zigzag;
+        return result;
     }
 }
