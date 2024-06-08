@@ -1,15 +1,12 @@
 class Solution {
-    int[] waysCount;
     public int climbStairs(int n) {
-        waysCount = new int[n+1];
-        Arrays.fill(waysCount,-1);
-        return countWays(n);
-    }
-
-    private int countWays(int n){
-        if(n <= 2) return n;
-        if(waysCount[n] != -1) return waysCount[n];
-        waysCount[n] = countWays(n-1) + countWays(n-2);
-        return waysCount[n];
+        if(n == 1 || n == 2) return n;
+        int[] stairCounts = new int[n + 1];
+        stairCounts[1] = 1;
+        stairCounts[2] = 2;
+        for (int i = 3; i <= n; i++) {
+            stairCounts[i] = stairCounts[i - 1] + stairCounts[i - 2];
+        }
+        return stairCounts[n]; 
     }
 }
