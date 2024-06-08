@@ -1,27 +1,19 @@
 class Solution {
-    int[] coinCounts;
 
     public int coinChange(int[] coins, int amount) {
-        if (amount == 0 || coins == null || coins.length == 0) return 0;
-        coinCounts = new int[amount + 1];
-        Arrays.fill(coinCounts, -2);
-        coinCounts[0] = 0;
-        return calculateCoinCounts(coins, amount);
-    }
+        int[] minCoinsCount = new int[amount + 1];
+        minCoinsCount[0] = 0;
 
-    private int calculateCoinCounts(int[] coins, int amount) {
-        if (amount <= 0) return 0;
-        if (coinCounts[amount] != -2) return coinCounts[amount];
-
-        Integer count = null;
-        for (int coin : coins) {
-            if (coin > amount) continue;
-            int coinCount = calculateCoinCounts(coins, amount - coin);
-            if (coinCount < 0) continue;
-            coinCount++;
-            count = count == null ? coinCount : Math.min(count, coinCount);
+        for (int currentAmount = 1; currentAmount <= amount; currentAmount++) {
+            // setting higher limit
+            int minCount = amount + 1;
+            for (int coin : coins) {
+                if (coin > currentAmount) continue;
+                minCount = Math.min(minCount, 1 + minCoinsCount[currentAmount - coin]);
+            }
+            minCoinsCount[currentAmount] = minCount;
         }
-        coinCounts[amount] = count == null ? -1 : count;
-        return coinCounts[amount];
+        return minCoinsCount[amount] == amount + 1 ? -1 : minCoinsCount[amount];
     }
+
 }
