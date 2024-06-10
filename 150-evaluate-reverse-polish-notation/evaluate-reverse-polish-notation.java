@@ -1,33 +1,25 @@
 class Solution {
     public int evalRPN(String[] tokens) {
         if (tokens == null || tokens.length == 0) return 0;
-        Stack<Integer> stack = new Stack<>();
+    
+        Deque<Integer> stack = new ArrayDeque<>();
+        Map<String, BiFunction<Integer, Integer, Integer>> operations = Map.of(
+            "+", (a, b) -> b + a,
+            "-", (a, b) -> b - a,
+            "*", (a, b) -> b * a,
+            "/", (a, b) -> b / a
+        );
+        
         for (String token : tokens) {
-            if (token.equals("+") || token.equals("-") || token.equals("/") || token.equals("*")) {
-                // calculate and push back to stack
+            if (operations.containsKey(token)) {
                 int first = stack.pop();
                 int second = stack.pop();
-                int result = 0;
-                switch (token) {
-                    case "+":
-                        result = first + second;
-                        break;
-                    case "-":
-                        result = second - first;
-                        break;
-                    case "*":
-                        result = first * second;
-                        break;
-                    case "/":
-                        result = second / first;
-                        break;
-                    default:
-                        result = 0;
-                        break;
-                }
-                stack.push(result);
-            } else stack.push(Integer.parseInt(token));
+                stack.push(operations.get(token).apply(first, second));
+            } else {
+                stack.push(Integer.parseInt(token));
+            }
         }
+        
         return stack.pop();
     }
 }
