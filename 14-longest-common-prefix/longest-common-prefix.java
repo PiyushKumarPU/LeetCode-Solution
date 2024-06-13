@@ -1,23 +1,44 @@
 class Solution {
     public String longestCommonPrefix(String[] strs) {
-        if (strs == null) return null;
-        else if (strs.length == 1) return strs[0];
-        String minCommon = longestCommon(strs[0], strs[1]);
-        if (minCommon.isEmpty()) return minCommon;
-        for (int i = 2; i < strs.length; i++) {
-            minCommon = longestCommon(minCommon, strs[i]);
-            if (minCommon.isEmpty()) return minCommon;
-        }
-        return minCommon;
-    }
+        if (strs == null || strs.length == 0) return "";
+        TrieBucket root = new TrieBucket();
 
-    private String longestCommon(String str1, String str2){
-        if(str1.length() > str2.length()) return longestCommon(str2,str1);
-        StringBuilder str = new StringBuilder("");
-        for(int i = 0; i < str1.length(); i++){
-            if(str1.charAt(i) == str2.charAt(i)) str.append(str1.charAt(i));
-            else break;
+        // Find the minimum length of the strings in the array
+        int minLength = Integer.MAX_VALUE;
+        for (String str : strs) {
+            if (str.length() < minLength) {
+                minLength = str.length();
+            }
         }
-        return str.toString();
+        if(minLength == 0) return "";
+        // Build the Trie up to the length of the shortest string
+        for (String str : strs) {
+            TrieBucket temp = root;
+            for (int i = 0; i < minLength; i++) {
+                char current = str.charAt(i);
+                if (!temp.cache.containsKey(current)) {
+                    temp.cache.put(current, new TrieBucket());
+                }
+                temp = temp.cache.get(current);
+            }
+        }
+
+        // Find the longest common prefix
+        StringBuilder builder = new StringBuilder();
+        TrieBucket temp = root;
+        while (temp.cache.size() == 1) {
+            Map.Entry<Character, TrieBucket> entry = temp.cache.entrySet().iterator().next();
+            builder.append(entry.getKey());
+            temp = entry.getValue();
+        }
+        return builder.toString();
+    }
+}
+
+class TrieBucket {
+    Map<Character, TrieBucket> cache;
+
+    public TrieBucket() {
+        cache = new HashMap<>();
     }
 }
