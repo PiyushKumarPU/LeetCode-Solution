@@ -1,26 +1,29 @@
 class Solution {
-    
-    char[][] matrix;
     public int numIslands(char[][] grid) {
-        int count = 0;
-        matrix = grid;
-        for(int i = 0; i < grid.length; i++){
-            for(int j = 0; j < grid[i].length; j++){
-                if(matrix[i][j] == '1'){
-                    count++;
-                    bfs(i,j);
+        int m = grid.length, n = grid[0].length;
+        int islandCount = 0;
+        for(int i = 0; i < m; i++){
+            for(int j = 0; j < n; j++){
+                if(grid[i][j] == '1'){
+                    islandCount++;
+                    captureConnectedLand(i,j,grid);
                 }
             }
         }
-        return count;
+        return islandCount;
+    }
+    int[] rows = {-1,1,0,0};
+    int[] cols = {0,0,-1,1};
+    private void captureConnectedLand(int i, int j, char[][] grid){
+        if(!isValidIndex(i,j,grid) || grid[i][j] == '0') return;
+        grid[i][j] = '0';
+        for(int k = 0; k < 4;k++){
+            //if(isValidIndex(i+rows[k],j + cols[k],grid) && grid[i+rows[k]][j + cols[k]] != '0')
+                captureConnectedLand(i+rows[k], j + cols[k], grid);
+        }
     }
 
-    private void bfs(int i, int j){
-        if(i < 0 || i >= matrix.length || j < 0 || j >= matrix[0].length || matrix[i][j] != '1') return;
-        if( matrix[i][j] == '1')  matrix[i][j] = '0';
-        bfs(i-1,j);
-        bfs(i+1,j);
-        bfs(i,j-1);
-        bfs(i,j+1);
+    private boolean isValidIndex(int i, int j, char[][] grid){
+        return i >=0 && i < grid.length && j >=0 && j < grid[i].length;
     }
 }
