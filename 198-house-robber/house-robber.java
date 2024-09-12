@@ -1,13 +1,13 @@
 class Solution {
     int[] money;
-
     public int rob(int[] nums) {
         if (nums == null || nums.length == 0) return 0;
         if (nums.length == 1) return nums[0];
         money = new int[nums.length];
         Arrays.fill(money, -1);
         money[0] = nums[0];
-        return calculateMoney(nums, nums.length - 1);
+        return calculateMoney(nums, nums.length - 1);   
+        
     }
 
     private int calculateMoney(int[] nums, int index) {
