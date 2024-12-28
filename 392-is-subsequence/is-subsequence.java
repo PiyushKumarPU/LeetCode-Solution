@@ -9,6 +9,7 @@ class Solution {
             if (start == t.length()) return false;
             start++;
         }
-        return true;
+        // check if all character matched
+        return i == s.length();
     }
 }
