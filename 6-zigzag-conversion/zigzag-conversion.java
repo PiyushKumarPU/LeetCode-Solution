@@ -1,32 +1,30 @@
 class Solution {
     public String convert(String s, int numRows) {
-        StringBuilder result = new StringBuilder();
+        if (numRows == 1 || s.length() <= numRows) {
+            return s; // No zigzag pattern needed
+        }
+
         List<StringBuilder> rows = new ArrayList<>(numRows);
         for (int i = 0; i < numRows; i++) {
             rows.add(new StringBuilder());
         }
 
-        int start = 0, i = 0;
-        while (i < s.length()) {
-            if (start == 0) {
-                while (start < numRows && i < s.length()) {
-                    rows.get(start).append(s.charAt(i++));
-                    start++;
-                }
+        int currentRow = 0;
+        boolean goingDown = false;
+
+        for (char c : s.toCharArray()) {
+            rows.get(currentRow).append(c);
+            if (currentRow == 0 || currentRow == numRows - 1) {
+                goingDown = !goingDown;
             }
-            if (start == numRows) {
-                start -= 2;
-                start = Math.max(start, 0);
-                while (start > 0 && i < s.length()) {
-                    rows.get(start).append(s.charAt(i++));
-                    start--;
-                }
-            }
+            currentRow += goingDown ? 1 : -1;
         }
 
+        StringBuilder result = new StringBuilder();
         for (StringBuilder row : rows) {
             result.append(row);
         }
+
         return result.toString();
     }
 }
