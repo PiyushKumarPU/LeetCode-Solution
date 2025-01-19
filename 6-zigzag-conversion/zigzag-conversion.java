@@ -1,30 +1,34 @@
 class Solution {
     public String convert(String s, int numRows) {
-        if (numRows == 1 || s.length() <= numRows) {
-            return s;
-        }
-        
-        StringBuilder[] rows = new StringBuilder[numRows];
-        for (int i = 0; i < numRows; i++) {
-            rows[i] = new StringBuilder();
-        }
-        
-        int rowIndex = 0;
-        boolean goingDown = false;
-        
-        for (char c : s.toCharArray()) {
-            rows[rowIndex].append(c);
-            if (rowIndex == 0 || rowIndex == numRows - 1) {
-                goingDown = !goingDown;
-            }
-            rowIndex += goingDown ? 1 : -1;
-        }
-        
         StringBuilder result = new StringBuilder();
-        for (StringBuilder row : rows) {
-            result.append(row);
+        List<List<Character>> rows = new ArrayList<>(numRows);
+        for (int i = 0; i < numRows; i++) {
+            rows.add(new ArrayList<>());
         }
-        
+
+        int start = 0, i = 0;
+        while (i < s.length()) {
+            start = Math.max(start, 0);
+            if (start == 0) {
+                while (start < numRows && i < s.length()) {
+                    rows.get(start).add(s.charAt(i++));
+                    start++;
+                }
+            }
+            if (start == numRows) {
+                start -= 2;
+                while (start > 0 && i < s.length()) {
+                    rows.get(start).add(s.charAt(i++));
+                    start--;
+                }
+            }
+        }
+
+        for (List<Character> row : rows) {
+            for (Character character : row) {
+                result.append(character);
+            }
+        }
         return result.toString();
     }
 }
