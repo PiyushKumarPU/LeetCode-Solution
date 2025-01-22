@@ -10,23 +10,21 @@
  */
 class Solution {
     public ListNode removeNthFromEnd(ListNode head, int n) {
-        if (head == null || (head.next == null && n == 1)) return null;
-        // find length of the LinkedList
-        int nodeCount = 0;
-        ListNode temp = head;
-        while (temp != null) {
-            nodeCount++;
-            temp = temp.next;
+         if (head == null || head.next == null) return null;
+        ListNode temp = new ListNode(0), first = head, second = head;
+        temp.next = head;
+        for (int i = 0; i < n; i++) {
+            if (first == null) return null;
+            first = first.next;
         }
-        int jumpCount = nodeCount - 1 - n;
-        temp = head;
-        if (jumpCount < 0) {
-            head = head.next;
-        } else {
-            for (int i = 0; i < jumpCount; i++)
-                temp = temp.next;
-            temp.next = temp.next.next;
+        if (first == null) {
+            return head.next;
         }
-        return head;
+        while (first.next != null) {
+            first = first.next;
+            second = second.next;
+        }
+        second.next = second.next.next;
+        return temp.next;
     }
 }
