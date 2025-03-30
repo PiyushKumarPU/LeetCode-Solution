@@ -10,19 +10,19 @@
  */
 class Solution {
     public ListNode mergeKLists(ListNode[] lists) {
-        PriorityQueue<Integer> minHeap = new PriorityQueue<>();
+        PriorityQueue<ListNode> minHeap = new PriorityQueue<>(Comparator.comparingInt(o -> o.val));
         for (ListNode node : lists) {
-            while (node != null) {
-                minHeap.add(node.val);
-                node = node.next;
-            }
+            if (node != null)
+                minHeap.add(node);
         }
-
         ListNode temp = new ListNode(0);
         ListNode head = temp;
         while (!minHeap.isEmpty()) {
-            head.next = new ListNode(minHeap.poll());
+            ListNode smallest = minHeap.poll();
+            head.next = new ListNode(smallest.val);
             head = head.next;
+            if (smallest.next != null)
+                minHeap.add(smallest.next);
         }
         return temp.next;
     }
