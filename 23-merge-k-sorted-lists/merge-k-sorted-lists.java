@@ -10,33 +10,21 @@
  */
 class Solution {
     public ListNode mergeKLists(ListNode[] lists) {
+        PriorityQueue<Integer> minHeap = new PriorityQueue<>();
+        for (ListNode node : lists) {
+            while (node != null) {
+                minHeap.add(node.val);
+                node = node.next;
+            }
+        }
+
         ListNode temp = new ListNode(0);
         ListNode head = temp;
-        Integer nextMin = findNextMin(lists);
-        while (nextMin != null) {
-            head.next = new ListNode(nextMin);
+        while (!minHeap.isEmpty()) {
+            head.next = new ListNode(minHeap.poll());
             head = head.next;
-            nextMin = findNextMin(lists);
         }
         return temp.next;
     }
 
-    private Integer findNextMin(ListNode[] lists) {
-         Integer currentMin = Integer.MAX_VALUE, minIndex = -1;
-        for (int i = 0; i < lists.length; i++) {
-            ListNode current = lists[i];
-            if (current == null)
-                continue;
-            if (lists[i].val < currentMin) {
-                currentMin = lists[i].val;
-                minIndex = i;
-            }
-        }
-        if (minIndex >= 0 && lists[minIndex] != null) {
-            lists[minIndex] = lists[minIndex].next;
-            return currentMin;
-        }
-        return null;
-
-    }
 }
